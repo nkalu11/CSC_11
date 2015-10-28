@@ -34,4 +34,4 @@ _start:
           bx lr
 
   .data
-        string:  .ascii " "
+        string:  .ascii "Hi How are ya? "
