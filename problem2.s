@@ -1,60 +1,67 @@
 .data
 /* First message */
 .balign 4
-message1: .asciz "Enter your ISP package letter\n(ONLY ENTER A LOWER CASE LETTER FROM a, b, or c!!) : "
+message11: .asciz "Enter your ISP package letter\n(ONLY ENTER A LOWER CASE LETTER FROM a, b, or c!!) : "
 /* Second message */
 .balign 4
-message2: .asciz "Your Monthly bill is $%d\n"
+message22: .asciz "Your Monthly bill is $%d\n"
 /* Second message */
 .balign 4
-message4: .asciz "Enter the hours you used : \n"
+message44: .asciz "Enter the hours you used : \n"
 /* Second message */
 .balign 4
-message3: .asciz "Error invalid input. RE-RUN THE PROGRAM NOW.\n"
+message33: .asciz "Error invalid input. RE-RUN THE PROGRAM NOW.\n"
 /* Where scanf will store the number read */
 .balign 4
-number_read: .word 0
+number_read11: .word 0
 /* Where scanf will store the number read */
 .balign 4
-number_read2: .word 0
+number_read22: .word 0
 /* Format pattern for scanf */
 .balign 4
-scan_pattern: .asciz "%c"
+scan_pattern11: .asciz "%c"
 /* Format pattern for scanf */
 .balign 4
-scan_pattern2: .asciz "%d"
+scan_pattern22: .asciz "%d"
 .balign 4
 return: .word 0
 .text
-.global main
-main:
+.global second
+second:
        PUSH {r4, r5, r6, r7, r8}
        ldr r1, address_of_return /* r1 ← &address_of_return */
        str lr, [r1] /* *r1 ← lr */
-       
+
        intro:
-       ldr r0, address_of_message1 /* r0 ← &message1 */
+       ldr r0, address_of_message11 /* r0 ← &message1 */
        bl printf /* call to printf */
+
+       ldr r0, address_of_scan_pattern11 /* r0 ← &scan_pattern */
+       ldr r1, address_of_number_read11 /* r1 ← &number_read */
+       bl scanf /* call to scanf */
+
+
+       ldr r0, address_of_scan_pattern11 /* r0 ← &scan_pattern */
+       ldr r1, address_of_number_read11 /* r1 ← &number_read */
+       bl scanf /* call to scanf */
+
+
+       ldr r0, address_of_message44 /* r0 ← &message1 */
+       bl printf /* call to printf */
+
+
+       ldr r0, address_of_scan_pattern22 /* r0 ← &scan_pattern */
+       ldr r1, address_of_number_read22 /* r1 ← &number_read */
+       bl scanf /* call to scanf */
+
        
-       ldr r0, address_of_scan_pattern /* r0 ← &scan_pattern */
-       ldr r1, address_of_number_read /* r1 ← &number_read */
-       bl scanf /* call to scanf */
-      
-       ldr r0, address_of_message4 /* r0 ← &message1 */
-       bl printf /* call to printf */
-      
-
-       ldr r0, address_of_scan_pattern2 /* r0 ← &scan_pattern */
-       ldr r1, address_of_number_read2 /* r1 ← &number_read */
-       bl scanf /* call to scanf */
-        
-       ldr r0, address_of_number_read
+       ldr r0, address_of_number_read11
        ldr r0, [r0]
-   
-       ldr r1, address_of_number_read2
-       ldr r1, [r1]
 
-    
+       ldr r1, address_of_number_read22
+       ldr r1, [r1]
+        
+       
        test:
        cmp r0, #0x61 @test to see if r1 is  #1
        beq planA
@@ -65,18 +72,18 @@ main:
        bal error
 
        error:
-       ldr r0, address_of_message3 /* r0 ← &message1 */
+       ldr r0, address_of_message33 /* r0 ← &message1 */
        bl printf /* call to printf */
        bal intro
-        
 
-       
+
+
        planA:
        cmp r1, #11
        blt firstA
        cmp r1, #11
        beq firstA
-      
+
        cmp r1, #22
        blt secA
        cmp r1, #22
@@ -87,7 +94,7 @@ main:
        firstA:
        mov r1, #30
        bal end
-   
+
        secA:
        mov r2, #3
        mov r3, #0
@@ -106,21 +113,20 @@ main:
        mov r1, #30
        add r1, r1, r3
        add r1, r1, #33
-       bal end       
- 
+       bal end
+
        planB:
        cmp r1, #22
        blt firstB
        cmp r1, #22
        beq firstB
-
        cmp r1, #44
        blt secB
        cmp r1, #44
        beq secB
        cmp r1, #44
        bgt thirB
-    
+
 
 
        firstB:
@@ -142,6 +148,7 @@ main:
        mov r2, #4
        mov r3, #0
        sub r3, r1, #44
+
        mul r3, r2
        mov r1, #35
        add r1, r1, r3
@@ -184,11 +191,11 @@ main:
        add r1, r1, r3
        add r1, r1, #33
        bal end
- 
+
 
 
         end:
-        ldr r0, address_of_message2 /* r0 ← &message2 */
+        ldr r0, address_of_message22 /* r0 ← &message2 */
         bl printf /* call to printf */
         POP {r4, r5, r6, r7, r8}
         ldr lr, address_of_return /* lr ← &address_of_return */
@@ -196,14 +203,14 @@ main:
         bx lr /* return from main using lr */
 
 
-address_of_message1: .word message1
-address_of_message2: .word message2
-address_of_message3: .word message3
-address_of_message4: .word message4
-address_of_scan_pattern: .word scan_pattern
-address_of_scan_pattern2: .word scan_pattern2
-address_of_number_read: .word number_read
-address_of_number_read2: .word number_read2
+address_of_message11: .word message11
+address_of_message22: .word message22
+address_of_message33: .word message33
+address_of_message44: .word message44
+address_of_scan_pattern11: .word scan_pattern11
+address_of_scan_pattern22: .word scan_pattern22
+address_of_number_read11: .word number_read11
+address_of_number_read22: .word number_read22
 address_of_return: .word return
 /* External */
 .global printf
