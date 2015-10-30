@@ -227,7 +227,7 @@ second:
         ldr lr, [lr] /* lr ← *lr */
         bx lr /* return from main using lr */
 
-
+/*set labels to variables declared above*/
 address_of_message11: .word message11
 address_of_message22: .word message22
 address_of_message33: .word message33

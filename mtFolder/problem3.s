@@ -81,6 +81,7 @@ end1:
  ldr lr, address_of_return /* lr ← &address_of_return */
  ldr lr, [lr] /* lr ← *lr */
  bx lr /* return from main using lr */
+/*lables for variables declared above*/
 address_of_message1 : .word message1
 address_of_message2 : .word message2
 address_of_scan_pattern : .word scan_pattern
