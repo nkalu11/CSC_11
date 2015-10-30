@@ -9,11 +9,13 @@ scan_pattern : .asciz "%d"
 /* Where scanf will store the number read */
 .balign 4
 number_read: .word 0
+/*return*/
 .balign 4
 return: .word 0
 .text
 .global main
 main:
+
  ldr r1, address_of_return /* r1 ← &address_of_return */
  str lr, [r1] /* *r1 ← lr */
   POP {r6}
@@ -28,6 +30,8 @@ main:
  ldr r1, address_of_number_read /* r1 ← &number_read */
  ldr r1, [r1] /* r1 ← *r1 */
 
+
+/*Test user input and branch to a problem function*/
  cmp r1, #1
  beq firstl
  cmp r1, #2
@@ -38,21 +42,27 @@ main:
  beq end
 bal loop
 
+/*Used to get around not being able to beq and bl at the same time*/
+/*this is branched to and then branches problem1 function*/
 firstl:
 bl first
 bal loop
 
+/*Used to get around not being able to beq and bl at the same time*/
+/*this is branched to and then branches problem2 function*/
 secl:
  bl second
  bal loop
 
+/*Used to get around not being able to beq and bl at the same time*/
+/*this is branched to and then branches problem3 function*/
 thirl:
  bl third
  bal loop
 
 
 
-
+/*This function restores registers and branches to the return address*/
  end:
  PUSH {r6}
  ldr lr, address_of_return /* lr ← &address_of_return */

@@ -28,11 +28,16 @@ return: .word 0
 .text
 .global second
 second:
+
+
+       /*store values of registers*/
        PUSH {r4, r5, r6, r7, r8}
        ldr r1, address_of_return /* r1 ← &address_of_return */
        str lr, [r1] /* *r1 ← lr */
 
+       /*Loop used to ensure correct user input*/
        intro:
+       /*get input of Isp pakage as well as hours used*/
        ldr r0, address_of_message11 /* r0 ← &message1 */
        bl printf /* call to printf */
 
@@ -54,14 +59,15 @@ second:
        ldr r1, address_of_number_read22 /* r1 ← &number_read */
        bl scanf /* call to scanf */
 
-       
+       /*store isp package in r0*/
        ldr r0, address_of_number_read11
        ldr r0, [r0]
-
+      
+       /*store hours used in r1*/
        ldr r1, address_of_number_read22
        ldr r1, [r1]
         
-       
+       /*test r0 to determine subroutine branch based on letter input*/
        test:
        cmp r0, #0x61 @test to see if r1 is  #1
        beq planA
@@ -71,13 +77,16 @@ second:
        beq planC
        bal error
 
+       /*if r0 does not contain a, b, or c an error message prompts user that*/
+       /*program will restart*/
        error:
        ldr r0, address_of_message33 /* r0 ← &message1 */
        bl printf /* call to printf */
        bal intro
 
 
-
+      /*Determine range of hours used and branch to correct subroutine*/
+      /*ISP package a*/
        planA:
        cmp r1, #11
        blt firstA
@@ -91,10 +100,13 @@ second:
        cmp r1, #22
        bgt thirA
 
+       /*if hours<=11*/
+       /*set r1 to 30*/
        firstA:
        mov r1, #30
        bal end
-
+       /*if hours <=22*/
+       /*get hours over 11, multiply them by three, add 30*/
        secA:
        mov r2, #3
        mov r3, #0
@@ -104,7 +116,8 @@ second:
        add r1, r1, r3
        bal end
 
-
+       /*if hours >=22*/
+       /*get hours over 22, multiply them by six, add 30, then add 3*11*/
        thirA:
        mov r2, #6
        mov r3, #0
@@ -115,6 +128,8 @@ second:
        add r1, r1, #33
        bal end
 
+      /*Determine range of hours used and branch to correct subroutine*/
+      /*ISP package b*/
        planB:
        cmp r1, #22
        blt firstB
@@ -128,12 +143,14 @@ second:
        bgt thirB
 
 
-
+       /*if hours <=22*/
+       /*set r1 to 35*/
        firstB:
        mov r1, #35
        bal end
 
-
+       /*if hours <=44*/
+      /*get hours over 44, multiply them by two, add 35*/
        secB:
        mov r2, #2
        mov r3, #0
@@ -143,7 +160,8 @@ second:
        add r1, r1, r3
        bal end
 
-
+       /*if hours >44*/
+       /*get hours over 44, multiply them by four, add 35, then add 2*22*/
        thirB:
        mov r2, #4
        mov r3, #0
@@ -155,7 +173,9 @@ second:
        add r1, r1, #44
        bal end
 
-
+ 
+      /*Determine range of hours used and branch to correct subroutine*/
+      /*ISP package c*/
        planC:
        cmp r1, #33
        beq firstC
@@ -168,11 +188,15 @@ second:
        cmp r1, #66
        bgt thirC
 
+       /*if hours <=33*/
+       /*set r1 to 40*/
        firstC:
        mov r1, #40
        bal end
 
-       secC:
+       /*if hours <=66*/
+       /*get hours over 33, multiply them by 1,then  add 40*/
+       secC: 
        mov r2, #1
        mov r3, #0
        sub r3, r1, #33
@@ -181,7 +205,8 @@ second:
        add r1, r1, r3
        bal end
 
-
+       /*if hours >=66*/
+       /*get hours over 66, multiply them by two, add 40, then add 1*33*/
        thirC:
        mov r2, #2
        mov r3, #0
@@ -193,7 +218,7 @@ second:
        bal end
 
 
-
+       /*restore registers and branch to return address*/
         end:
         ldr r0, address_of_message22 /* r0 ← &message2 */
         bl printf /* call to printf */

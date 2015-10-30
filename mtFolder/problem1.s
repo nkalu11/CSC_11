@@ -20,15 +20,19 @@ scan_pattern: .asciz "%d"
 /* Format pattern for scanf */
 .balign 4
 scan_pattern2: .asciz "%d"
+/*return*/
 .balign 4
 return: .word 0
 .text
 .global first
 first:
+
+       /*Save value of registers*/
        PUSH {r4, r5, r6, r7, r8}
        ldr r1, address_of_return /* r1 ← &address_of_return */
        str lr, [r1] /* *r1 ← lr */
 
+       /*loop to ensure correct user input*/
        intro:
        ldr r0, address_of_message1 /* r0 ← &message1 */
        bl printf /* call to printf */
@@ -40,13 +44,16 @@ first:
        ldr r1, address_of_number_read2 /* r1 ← &number_read */
        bl scanf /* call to scanf */
 
+       /*store pay rate in r0*/
        ldr r0, address_of_number_read2
        ldr r0, [r0]
 
+       /*store hours worked in r1*/
        ldr r1, address_of_number_read
        ldr r1, [r1]
 
-
+       /*test used to determine range of hours worked*/
+       /*and then determine the sub routine that will operate on it*/
        test:
        cmp r1, #40 @test to see if r1 is  #1
        blt normal
@@ -61,18 +68,22 @@ first:
        cmp r1, #60
        beq sixty
        bal error
-       
+       /*if hours worked>60 an error message will be displayed and user will*/
+       /*have to re-enter*/
        error:
        ldr r0, address_of_message3 /* r0 ← &message1 */
        bl printf /* call to printf */
        bal intro
 
 
-
+       /*hours <= 40*/
        normal:
        mul r1, r0
-       bal end  @if so output 11
+       bal end  
 
+       /*40<hours<=50*/
+       /*determine how many hours over 40 there are*/
+       /*apply the double rate and then add it to the rate*40*/
        fifty:
        mov r4, #40
        mov r8, #2
@@ -85,7 +96,10 @@ first:
        add r1, r1, r0
        bal end
 
-
+       /*50<hour<=60*/
+       /*determine how many hours over 50 there are*/
+       /*apply the triple to it rate and then add it to the rate*40*/
+       /*and then add this to 10*double rate*/
        sixty:
        mov r6, #0
        mov r3, #0
@@ -108,7 +122,7 @@ first:
 
 
 
-
+       /*This function restores registers and branches to return*/
         end:
         ldr r0, address_of_message2 /* r0 ← &message2 */
         bl printf /* call to printf */
@@ -119,7 +133,7 @@ first:
 
 
 
-
+/*Give lables to all variables declared above*/
 address_of_message1: .word message1
 address_of_message2: .word message2
 address_of_message3: .word message3
