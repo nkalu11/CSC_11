@@ -1,7 +1,7 @@
 .data
 /* First message */
 .balign 4
-message11: .asciz "Enter a number follwed by an arithmatic\n symbol followed by another number, eaxmple: 3 * 7\n or enter '0 q 0' to quit(*, /, +, -, %(mod)) : "
+message11: .asciz "Enter your a number follwed by an arithmatic symbol followed by another number\n or input $ to quit(*, /, +, -) : "
 /* Second message */
 .balign 4
 message22: .asciz "%d * %d = %d\n"
@@ -14,9 +14,6 @@ message55: .asciz "%d - %d = %d\n"
 /* Second message */
 .balign 4
 message66: .asciz "%d + %d = %d\n"
-/* Second message */
-.balign 4
-message77: .asciz "%d (mod) %d = %d\n"
 /* Second message */
 .balign 4
 message33: .asciz "Error invalid input. RE-RUN THE PROGRAM NOW.\n"
@@ -91,27 +88,10 @@ main:
        beq subtract
        cmp r0, #0x2f @/
        beq division
-       cmp r0, #0x71 @q
-       beq quit
-       cmp r0, #0x25 @%
-       beq mod
+
        bal error
 
 
-
-
-      mod:
-        bl  modFunc
-      mov r3, r1
-        /* store hours used in r1*/
-       ldr r1, address_of_number_read22
-       ldr r1, [r1]
-
-       /*store hours used in r1*/
-       ldr r2, address_of_number_read33
-       ldr r2, [r2]
-
-         bal endMod
 
       mult:
         mul r1, r2
@@ -178,43 +158,68 @@ main:
 
 
 
-        /*restore registers and branch to return address*/
-        endMod:
-        ldr r0, address_of_message77 /* r0 ← &message2 */
-        bl printf /* call to printf */
-        bal intro
+
+
+
+
+
 
        /*restore registers and branch to return address*/
         endM:
         ldr r0, address_of_message22 /* r0 ← &message2 */
         bl printf /* call to printf */
         bal intro
+        POP {r4, r5, r6, r7, r8}
+        ldr lr, address_of_return /* lr ← &address_of_return */
+        ldr lr, [lr] /* lr ← *lr */
+        bx lr /* return from main using lr */
+
 
         /*restore registers and branch to return address*/
         endD:
         ldr r0, address_of_message44 /* r0 ← &message2 */
         bl printf /* call to printf */
-        bal intro
+         bal intro
+        POP {r4, r5, r6, r7, r8}
+        ldr lr, address_of_return /* lr ← &address_of_return */
+        ldr lr, [lr] /* lr ← *lr */
+        bx lr /* return from main using lr */
 
         /*restore registers and branch to return address*/
         endS:
         ldr r0, address_of_message55 /* r0 ← &message2 */
         bl printf /* call to printf */
-        bal intro
+         bal intro
+        POP {r4, r5, r6, r7, r8}
+        ldr lr, address_of_return /* lr ← &address_of_return */
+        ldr lr, [lr] /* lr ← *lr */
+        bx lr /* return from main using lr */
 
         /*restore registers and branch to return address*/
         endA:
         ldr r0, address_of_message66 /* r0 ← &message2 */
         bl printf /* call to printf */
         bal intro
-
-
-/*restore registers and branch to return address*/
-        quit:
         POP {r4, r5, r6, r7, r8}
         ldr lr, address_of_return /* lr ← &address_of_return */
         ldr lr, [lr] /* lr ← *lr */
         bx lr /* return from main using lr */
+/*restore registers and branch to return address*/
+        endA:
+        ldr r0, address_of_message66 /* r0 ← &message2 */
+        bl printf /* call to printf */
+        bal intro
+        POP {r4, r5, r6, r7, r8}
+        ldr lr, address_of_return /* lr ← &address_of_return */
+        ldr lr, [lr] /* lr ← *lr */
+        bx lr /* return from main using lr */
+/*restore registers and branch to return address*/
+        endA:
+        ldr r0, address_of_message66 /* r0 ← &message2 */
+        bl printf /* call to printf */
+        bal intro
+        POP {r4, r5, r6, r7, r8}
+
 
 /*set labels to variables declared above*/
 address_of_message11: .word message11
@@ -223,7 +228,6 @@ address_of_message33: .word message33
 address_of_message44: .word message44
 address_of_message55: .word message55
 address_of_message66: .word message66
-address_of_message77: .word message77
 address_of_scan_pattern11: .word scan_pattern11
 address_of_scan_pattern22: .word scan_pattern22
 address_of_scan_pattern33: .word scan_pattern33
