@@ -2,19 +2,17 @@
 /* return*/
 .balign 4
 return: .word 0
-/* Second message */
-.balign 4
-message1:.asciz " %d/n"
 .text
 .global modFunc
 
 
-
+       /*initialization of registers and storing of high registers*/
        modFunc:
        PUSH {r5, r6}
-       ldr r3, address_of_return /* r1 ← &address_of_return */
-       str lr, [r3] /* *r1 ← lr */
+       ldr r3, address_of_return /* r3 ← &address_of_return */
+       str lr, [r3] /* *r3 ← lr */
        mov r5, #0
+       /*loop to subtract r2 from r1 until r1<r2*/
        _subtract:
       cmp r1, r2  @ check to see if r1>r2
       blt end    @if not end
@@ -27,7 +25,8 @@ message1:.asciz " %d/n"
         ldr lr, address_of_return  /* lr ← &address_of_return */
         ldr lr, [lr] /* lr ← *lr */
         bx lr /* return from main using lr */
-        address_of_return : .word return
+/*variable labels*/     
+address_of_return : .word return
 address_of_message1 : .word message1
 /* External */
 .global printf
