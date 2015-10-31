@@ -27,7 +27,6 @@ return: .word 0
         bx lr /* return from main using lr */
 /*variable labels*/     
 address_of_return : .word return
-address_of_message1 : .word message1
 /* External */
 .global printf
 .global scanf

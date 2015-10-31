@@ -1,7 +1,7 @@
 .data
 /* First message */
 .balign 4
-message11: .asciz "Enter a number follwed by an arithmatic\n symbol followed by another number, eaxmple: 3 * 7\n or enter '0 q 0' to quit(*, /, +, -, %(mod)) : "
+message11: .asciz "Enter a number follwed by an arithmatic\n symbol followed by another number, eaxmple: 3 * 7\n or enter '0 q 0' to quit(*, /, +, -, %) : "
 /* Second message */
 .balign 4
 message22: .asciz "%d * %d = %d\n"
