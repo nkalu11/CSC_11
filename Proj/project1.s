@@ -46,7 +46,7 @@ main:
 
 
        /*store values of registers*/
-       PUSH {r4, r5, r6, r7, r8}
+       PUSH {r4, r5, r6, r7, r8, r9}
        ldr r1, address_of_return /* r1 ← &address_of_return */
        str lr, [r1] /* *r1 ← lr */
 
@@ -103,8 +103,8 @@ main:
 
      /*this routine branches to the mod function and then prints the returned value*/
       mod:
-        bl  modFunc
-      mov r3, r1
+      bl  modFunc
+      add r3, r1, #0
         /* store first number input in r1*/
        ldr r1, address_of_number_read22
        ldr r1, [r1]
@@ -117,8 +117,9 @@ main:
 
        /*this routine multiplys both numbers and then prints the returned value*/
       mult:
+        mov r3, #0
         mul r1, r2
-        mov r3, r1 
+        add r3, r1, #0 
         /* store first number input in r1*/
        ldr r1, address_of_number_read22
        ldr r1, [r1]
@@ -131,9 +132,10 @@ main:
 
      /*add both numbers and print the result*/
       addition:
+       mov r3, #0
        add r1, r2
        
-       mov r3, r1 
+       add r3, r1, #0 
        /* store first number input in r1*/
        ldr r1, address_of_number_read22
        ldr r1, [r1]
@@ -145,9 +147,9 @@ main:
        bal endA
           /*Subtract second from first number and print result*/
       subtract:
-
+        mov r3, #0
         sub r1, r2
-        mov r3, r1
+        add r3, r1, #0
        /* store first number input in r1*/
        ldr r1, address_of_number_read22
        ldr r1, [r1]
@@ -159,9 +161,9 @@ main:
          bal endS
         /*branch to divFunc and print result*/
       division:
-         bl divideF
+       bl divideF
        
-       mov r3, r1     
+       add r3, r1, #0     
        /* store first number input in r1*/
        ldr r1, address_of_number_read22
        ldr r1, [r1]
@@ -214,7 +216,7 @@ main:
 
 /*restore registers and branch to return address*/
         quit:
-        POP {r4, r5, r6, r7, r8}
+        POP {r4, r5, r6, r7, r8, r9}
         ldr lr, address_of_return /* lr ← &address_of_return */
         ldr lr, [lr] /* lr ← *lr */
         bx lr /* return from main using lr */
