@@ -35,7 +35,7 @@ end:
     ldr lr,[sp],#+4  /* Pop the top of the stack and put it in lr */
     bx lr              /* Leave factorial */
  
-.globl main
+.global main
 main:
     str lr, [sp,#-4]!            /* Push lr onto the top of the stack */
     sub sp, sp, #4               /* Make room for one 4 byte integer in the s                               /* In these 4 bytes we will keep the number */
