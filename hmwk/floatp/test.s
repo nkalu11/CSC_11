@@ -1,12 +1,13 @@
 .data
 /* First message */
 .balign 4
-message1: .asciz "Hey, type a number: "
+message1: .asciz "Input a value to find the square root of: "
 /* Second message */
 .balign 4
-message2: .asciz "I read the number %f\n"
+message2: .asciz "sqrt: %f\n"
 .balign 4
-/* Format pattern for scanf */ .balign 4
+/* Format pattern for scanf */
+.balign 4
 scan_pattern: .asciz "%f"
 /* Where scanf will store the number read */
 .balign 4
@@ -75,15 +76,15 @@ main:
    VMOV s14, s7
 
    VCVT.F64.F32 d5, s14
-
-
+   
+   
    ldr r0, address_of_message2
 
    VMOV r2, r3, d5
       
 
    bl printf /* call to printf */
-  // pop {r4, r5, r6, r7, r8}
+   // pop {r4, r5, r6, r7, r8}
    ldr lr, address_of_return /* lr ← &address_of_return */
    ldr lr, [lr] /* lr ← *lr */
    bx lr /* return from main using lr */
