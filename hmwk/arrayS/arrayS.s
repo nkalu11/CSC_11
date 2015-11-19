@@ -85,7 +85,7 @@ end2:
 ldr r0, address_of_message2 /* r0 ← &number_read */
 bl printf /* call to print*/
 
- push {r4, r5, r6, r7, r8, r9}
+ push {r4, r5, r6, r7, r8, r9, r10}
  ldr lr, address_of_return /* lr ← &address_of_return */
  ldr lr, [lr] /* lr ← *lr */
 //refrence to variables
