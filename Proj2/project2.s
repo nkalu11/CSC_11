@@ -21,6 +21,10 @@ message77: .asciz "%d (mod) %d = %d\n"
 .balign 4
 message33: .asciz "Error invalid input. RE-RUN THE PROGRAM NOW.\n"
 /* Where scanf will store the number read */
+/* Second message */
+.balign 4
+output: .asciz "Equation %d: %d\n"
+
 .balign 4
 number_read11: .word 0
 /* Where scanf will store the number read */
@@ -62,18 +66,17 @@ array: .word 0
 /* Where scanf will store the number read */
 .balign 4
 size: .word 0
+
 .text
 .global main
 main:
 
 
        /*store values of registers*/
-       PUSH {r4, r5, r6, r7, r8, r9}
+       PUSH {r4, r5, r6, r7, r8, r9, r10}
        ldr r1, address_of_return /* r1 ← &address_of_return */
        str lr, [r1] /* *r1 ← lr */
 
-       /*Loop used to ensure correct user input and to run program as lon as user wants*/
-       intro:
 
        /*Prompt user on correct input*/
         ldr r0, sizemess /* r0 ← &message1 */
@@ -83,6 +86,10 @@ main:
        ldr r0, address_of_scan_patternC /* r0 ← &scan_pattern */
        ldr r1, size1 /* r1 ← &number_read */
        bl scanf /* call to scanf */
+       mov r10, #0     
+ 
+       /*Loop used to ensure correct user input and to run program as lon as use$  */ 
+       intro:
 
        /*Prompt user on correct input*/
         ldr r0, address_of_message11 /* r0 ← &message1 */
@@ -136,27 +143,26 @@ main:
 
       array_:
       //input is less than 45 so we prepare the registers for array
-//function
+ //function
  ldr r1, addra
- ldr r9, size1
- ldr r4, [r9]
- sub r4, r4, #1
- ldr r7, acount
- ldr r2, [r7]
+ ldr r4, size1
+ ldr r4, [r4]
+ ldr r2, acount
+ ldr r2, [r2]
  mov r3, #0
  mov r5, #0
  mov r6, #0
  //array is crated and incemented with
-//r2, once it is full we branch to print routine
+ //r2, once it is full we branch to print routine
  loop:
-    add r3, r1, r2, lsl #2  
+    add r3, r1, r10, lsl #2  
     str r0, [r3]
     add r2, r2, #1
-    add r6, r2, #0
     ldr r5, acount
     str r2, [r5]
-    cmp r6, r4
+    cmp r2, r4
     beq stop
+    add r10, r10, #1
     bal intro
     
    
@@ -170,7 +176,7 @@ stop:
  mov r9, #0
  mov r2, #0
  mov r4, #0
- ldr r6, address_of_number_read
+ ldr r6, size1
  ldr r6, [r6]
 
 //this fnction 
@@ -184,7 +190,7 @@ stop:
     ldr r2, [r9]
     add r4, r4, #1
     add r1, r4, #0
-    ldr r0, address_of_message2 /* r0 ← &message2 */
+    ldr r0, outputm /* r0 ← &message2 */
     bl  printf 
 
     add r5, r5, #1
@@ -194,9 +200,9 @@ stop:
       mod:
       bl  modFunc
       add r3, r1, #0
-       mov r0, #0
-       add r0, r0, r3
-         bal array_
+      mov r0, #0
+      add r0, r0, r3
+      bal array_
 
        /*this routine multiplys both numbers and then prints the returned value*/
       mult:
@@ -206,7 +212,7 @@ stop:
         
         mov r0, #0
         add r0, r0, r3
-         bal array_
+        bal array_
 
      /*add both numbers and print the result*/
       addition:
@@ -279,7 +285,7 @@ stop:
 
 /*restore registers and branch to return address*/
         quit:
-        POP {r4, r5, r6, r7, r8, r9}
+        POP {r4, r5, r6, r7, r8, r9, r10}
         ldr lr, address_of_return /* lr ← &address_of_return */
         ldr lr, [lr] /* lr ← *lr */
         bx lr /* return from main using lr */
@@ -289,6 +295,7 @@ addra: .word array
 acount: .word count
 size1: .word size
 sizemess: .word sizemes
+outputm: .word output
 
 address_of_message11: .word message11
 address_of_message22: .word message22
