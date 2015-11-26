@@ -20,6 +20,25 @@ return: .word 0
 array: .word 0
 .text
 .global main
+
+
+ modFunc:
+       PUSH {r7, lr}
+       mov r7, #0
+       /*loop to subtract r2 from r1 until r1<r2*/
+       _subtract:
+      cmp r1, r2  @ check to see if r1>r2
+      blt end2    @if not end
+      add r7, r7, #1  @else increment
+      sub r1, r1, r2  @subract r2 from r1
+      bl _subtract    @ branch back to beggining of loop
+
+        end2: @print results
+        POP {r7, lr}
+        bx lr /* return from main using lr */
+
+
+
 main:
 
  PUSH { r4, r5, r6, r7, r8, r9}
@@ -33,7 +52,7 @@ main:
 
   
   mov r8, #0
-  mov r9, #0
+  mov r9, #4
   mov r7, #0
   mov r6, #0
   mov r5, #0 
@@ -42,15 +61,16 @@ main:
   ldr r5, address_of_number_read
   ldr r5, [r5]
   add r1, r1, r5 
-  sub r5, r5, #2
+ // add r5, r5, #3
+  sub r1, r1, #2
   mov r6, #4
   mul r1, r1, r6 
   mov fp, sp            /* fp ← sp. Keep dynamic link in fp */
   sub sp, sp, r1        /* Enlarge the stack by 8 bytes */
-  mov r0, #1
+  mov r0, #2
   str r0, [sp]
   add sp, sp, #4
-  mov r0, #1
+  mov r0, #3
   str r0, [sp]
   add sp, sp, #4
   mov r0, #0
@@ -59,25 +79,50 @@ main:
   cmp r9, r5
   moveq sp, fp
   beq stop
-  ldr r0, [sp,#-4]
-  ldr r1, [sp,#-8]
-  add r2, r1, r0  
+  mov r1, #0
+  add r1, r1, r9
+  mov r2, #2 
+  bl modFunc
+ 
+ cmp r1, #0
+ beq zero
+ 
+  mov r1, #0
+  add r1, r1, r9
+  mov r2, #3
+  bl modFunc
+
+ cmp r1, #0
+ beq zero
+
+prime:
+  mov r2, #0
+  add r2, r2, r9
   str r2, [sp]
   add sp, sp, #4
   add r9, r9, #1
   bal loop            /* sp ← fp. Restore dynamic link in fp */
+zero:
+mov r2, #0
+str r2, [sp]
+  add sp, sp, #4
+  add r9, r9, #1
+bal loop
 
 
+
+   
   stop:
-mov r7, #0
+ mov r7, #0
  ldr r1, address_of_number_read 
  ldr r1, [r1]
  mov r6, #4
-add r7, r7, r1
-mov r9, #0
-  mul r1, r1, r6
+ add r7, r7, r1
+// sub r7, r7, #1
+ mov r9, #0
+ mul r1, r1, r6
  mov fp, sp            /* fp ← sp. Keep dynamic link in fp */
-  sub sp, sp, r1        /* Enlarge the stack by 8 bytes */
+ sub sp, sp, r1        /* Enlarge the stack by 8 bytes */
   
    loop2:
   cmp r9, r7
