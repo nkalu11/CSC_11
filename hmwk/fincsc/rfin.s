@@ -5,7 +5,7 @@
 message1: .asciz "I have a number between 1 and 1000\n\nCan you guess my number? You will be\n\ngiven a maximum of 10 guesses.\n\nPlease type your first guess. %d: "
 /* Second message */
 .balign 4
-message2: .asciz "I read the number %d\n"
+message2: .asciz "\nI read the number %d\n"
 /* Format pattern for scanf */
 /* Second message */
 .balign 4
@@ -113,18 +113,21 @@ ranf:
 .global main
 main:
  PUSH {r4, r5, r6, r7, r9, lr}
+ bloop:
  bl ranf
 // ldr r0, address_of_message1 /* r0 ← &message1 */
 // bl printf /* call to printf */
+
  mov r6, #0
  add r6, r6, r1
  mov r7, #0
  mov r7, #10
+ 
+ ldr r0, address_of_message1 /* r0 ← &message1 */
+ bl printf /* call to printf */
  loop:
  cmp r7, #0
  beq end1
- ldr r0, address_of_message1 /* r0 ← &message1 */
- bl printf /* call to printf */
  ldr r0, address_of_scan_pattern /* r0 ← &scan_pattern */
  ldr r1, address_of_number_read /* r1 ← &number_read */
  bl scanf /* call to scanf */
@@ -165,7 +168,7 @@ main:
  ldr r1, address_of_number_read2
  ldr r1, [r1]
  cmp r1, #0x79
- beq loop
+ beq bloop
  bal end
 
 end1:
@@ -197,3 +200,4 @@ address_of_messaget: .word messaget
 .global time
 .global srand
 .global rand
+.global scanf
