@@ -1,7 +1,7 @@
 .data
 /* First message */
 .balign 4
-message1: .asciz "Input upper limit for prime numbers: "
+message111: .asciz "Input upper limit for prime numbers: "
 /* Second message */
 .balign 4
 message2: .asciz "Prime #%d: %d\n"
@@ -19,7 +19,7 @@ return: .word 0
 .balign 4
 array: .word 0
 .text
-.global main
+.global primeF
 
 
  modFunc:
@@ -39,18 +39,25 @@ array: .word 0
 
 
 
-main:
+primeF:
 
  PUSH { r4, r5, r6, r7, r8, r9}
  ldr r1, address_of_return /* r1 ← &address_of_return */
  str lr, [r1] /* *r1 ← lr */
- ldr r0, address_of_message1 /* r0 ← &message1 */
+
+ ldr r0, address_of_message111 /* r0 ← &message1 */
  bl printf /* call to printf */
+ 
+  
  ldr r0, address_of_scan_pattern /* r0 ← &scan_pattern */
  ldr r1, address_of_number_read /* r1 ← &number_read */
  bl scanf /* call to scanf */
 
-  
+  ldr r1, address_of_number_read  
+  ldr r1, [r1]
+  cmp r1, #4
+  blt end
+ 
   mov r8, #0
   mov r9, #4
   mov r7, #0
@@ -418,7 +425,7 @@ end:
  ldr lr, [lr] /* lr ← *lr */
  bx lr /* return from main using lr */
 //lables for all variables
-address_of_message1 : .word message1
+address_of_message111 : .word message111
 address_of_message2 : .word message2
 address_of_message3 : .word message3
 address_of_scan_pattern : .word scan_pattern

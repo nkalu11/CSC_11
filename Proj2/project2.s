@@ -46,7 +46,7 @@ main:
 
 
        /*store values of registers*/
-       PUSH {r4, r5, r6, r7, r8, r9}
+      // PUSH {r4, r5, r6, r7, r8, r9}
        ldr r1, address_of_return /* r1 ← &address_of_return */
        str lr, [r1] /* *r1 ← lr */
 
@@ -85,21 +85,39 @@ main:
 
        /*test r0 to determine subroutine branch based on character input*/
        test:
+       cmp r0, #0x61 @a
+       beq ag1
        cmp r0, #0x2a @* 
        beq mult
+       cmp r0, #0x70 @p
+       beq prime1
        cmp r0, #0x2b @+
        beq addition
        cmp r0, #0x2d @-
        beq subtract
        cmp r0, #0x2f @/
        beq division
+       cmp r0, #0x73 @s
+       beq squareb
        cmp r0, #0x71 @q
        beq quit
        cmp r0, #0x25 @%
        beq mod
        bal error
 
+/*this routine branches to the mod function and then prints the returned */
+      prime1:
+      bl  primeF
+      bal intro
 
+/*this routine branches to the mod function and then prints the returned */
+      ag1:
+      bl  avg
+      bal intro
+/*this routine branches to the mod function and then prints the returned */
+      squareb:
+      bl  square
+      bal intro
 
      /*this routine branches to the mod function and then prints the returned value*/
       mod:
@@ -216,7 +234,7 @@ main:
 
 /*restore registers and branch to return address*/
         quit:
-        POP {r4, r5, r6, r7, r8, r9}
+       // POP {r4, r5, r6, r7, r8, r9}
         ldr lr, address_of_return /* lr ← &address_of_return */
         ldr lr, [lr] /* lr ← *lr */
         bx lr /* return from main using lr */

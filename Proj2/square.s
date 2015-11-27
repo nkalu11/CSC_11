@@ -26,23 +26,23 @@ two: .float 2.000
 six: .float 0.0001
 
 
-
 .text
-.global main 
-main:
+.global square 
+square:
+  
  //  push {r4, r5, r6, r7, r8}
-   ldr r1, address_of_return
-   str lr, [r1] /* *r1 ← lr */
-   ldr r0, address_of_message1 /* r0 ← &message1 */
-   bl printf /* call to printf */
+     ldr r1, address_of_return
+     str lr, [r1] /* *r1 ← lr */
+   
+     ldr r0, address_of_message1 /* r0 ← &message1 */
+     bl printf /* call to printf */
 
-   ldr r0, address_of_scan_pattern /* r0 ← &scan_pattern */
-   ldr r1, addnr /* r1 ← &number_read */
-   bl scanf /* call to scanf */
-
+       ldr r0, address_of_scan_pattern /* r0 ← &scan_pattern */
+       ldr r1, addnr /* r1 ← &number_read */
+       bl scanf /* call to scanf */
    ldr r1, addnr
    VLDR s1, [r1]
-    ldr r1, adzero
+   ldr r1, adzero
    VLDR s0, [r1]
    ldr r1, adzero
    VLDR s3, [r1]
@@ -55,7 +55,7 @@ main:
    VLDR s6, [r1]
    ldr r1, adzero
    VLDR s8, [r1]
-    ldr r1, adzero
+   ldr r1, adzero
    VLDR s7, [r1]
 
    VADD.F32 S7, S7, S1
@@ -75,15 +75,16 @@ main:
   
    VMOV s14, s7
 
-   VCVT.F64.F32 d5, s14
-   
+  // VCVT.F64.F32 d5, s14
+   VCVT.F64.F32 d0, s14
    
    ldr r0, address_of_message2
 
-   VMOV r2, r3, d5
+   VMOV r2, r3, d0
       
 
    bl printf /* call to printf */
+ 
    // pop {r4, r5, r6, r7, r8}
    ldr lr, address_of_return /* lr ← &address_of_return */
    ldr lr, [lr] /* lr ← *lr */

@@ -28,7 +28,7 @@ return: .word 0
 .balign 4
 array: .word 0
 .text
-.global main
+.global avg
 
  /*initialize registers and save value of high registers*/
        divideF:
@@ -64,7 +64,7 @@ array: .word 0
         bx lr /* return from main using lr */
 
 
-main:
+avg:
 
  PUSH { r4, r5, r6, r7, r8, r9, r10}
  ldr r1, address_of_return /* r1 ← &address_of_return */
