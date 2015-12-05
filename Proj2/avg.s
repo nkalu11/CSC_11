@@ -66,7 +66,7 @@ array: .word 0
 
 avg:
 
- PUSH { r4, r5, r6, r7, r8, r9, r10}
+ PUSH { r4, r5, r6, r7, r8, r9, r10, r11}
  ldr r1, address_of_return /* r1 ← &address_of_return */
  str lr, [r1] /* *r1 ← lr */
  ldr r0, address_of_message1 /* r0 ← &message1 */
@@ -157,7 +157,7 @@ end:
 
   
 
- POP { r4, r5, r6, r7, r8, r9, r10}
+ POP { r4, r5, r6, r7, r8, r9, r10, r11}
  ldr lr, address_of_return /* lr ← &address_of_return */
  ldr lr, [lr] /* lr ← *lr */
  bx lr /* return from main using lr */
