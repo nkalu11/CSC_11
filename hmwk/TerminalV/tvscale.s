@@ -59,7 +59,7 @@ main:
  PUSH {r4, r5, r6, r7, r8, r9} 
 //load values into registers
  ldr r1, =0x5
- ldr r2, =0x33
+ ldr r2, =0x32
  ldr r3, =0x9b
  ldr r4, =0x80
  ldr r5, =0x19eb85

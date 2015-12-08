@@ -38,8 +38,9 @@ square:
      bl printf /* call to printf */
 
        ldr r0, address_of_scan_pattern /* r0 ← &scan_pattern */
-       ldr r1, addnr /* r1 ← &number_read */
+       ldr r1, addnr /* r1 ← &number_read */  
        bl scanf /* call to scanf */
+   
    ldr r1, addnr
    VLDR s1, [r1]
    ldr r1, adzero

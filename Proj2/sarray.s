@@ -1,6 +1,9 @@
 .data
 /* First message */
 .balign 4
+m1: .asciz "Input upper limit for prime numbers: "
+/* First message */
+.balign 4
 message111: .asciz "Input upper limit for prime numbers: "
 /* Second message */
 .balign 4
@@ -44,8 +47,9 @@ primeF:
  PUSH { r4, r5, r6, r7, r8, r9}
  ldr r1, address_of_return /* r1 ← &address_of_return */
  str lr, [r1] /* *r1 ← lr */
-
- ldr r0, address_of_message111 /* r0 ← &message1 */
+// ldr r0, addm1
+// bl printf
+ ldr r0, addm1 /* r0 ← &message1 */
  bl printf /* call to printf */
  
   
@@ -426,6 +430,7 @@ end:
  bx lr /* return from main using lr */
 //lables for all variables
 address_of_message111 : .word message111
+addm1 : .word m1
 address_of_message2 : .word message2
 address_of_message3 : .word message3
 address_of_scan_pattern : .word scan_pattern
