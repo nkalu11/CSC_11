@@ -1,9 +1,6 @@
 .data
 /* First message */
 .balign 4
-m1: .asciz "Input upper limit for prime numbers: "
-/* First message */
-.balign 4
 message111: .asciz "Input upper limit for prime numbers: "
 /* Second message */
 .balign 4
@@ -25,59 +22,43 @@ array: .word 0
 .global primeF
 
 
- modFunc:
-       PUSH {r7, lr}
-       mov r7, #0
-       /*loop to subtract r2 from r1 until r1<r2*/
-   /*    _subtract:
-      cmp r1, r2  @ check to see if r1>r2
-      blt end2    @if not end
-      add r7, r7, #1  @else increment
-      sub r1, r1, r2  @subract r2 from r1
-      bl _subtract    @ branch back to beggining of loop
-     */
-       // end2: @print results
-        POP {r7, lr}
-        bx lr /* return from main using lr */
-
-
-
 primeF:
 
  PUSH { r4, r5, r6, r7, r8, r9}
  ldr r1, address_of_return /* r1 ← &address_of_return */
  str lr, [r1] /* *r1 ← lr */
-// ldr r0, addm1
-// bl printf
- ldr r0, addm1 /* r0 ← &message1 */
+
+ ldr r0, address_of_message111 /* r0 ← &message1 */
  bl printf /* call to printf */
  
   
  ldr r0, address_of_scan_pattern /* r0 ← &scan_pattern */
  ldr r1, address_of_number_read /* r1 ← &number_read */
  bl scanf /* call to scanf */
-
+  
+  /*test to see if input is less than 4 and branch to end if it is*/
   ldr r1, address_of_number_read  
   ldr r1, [r1]
   cmp r1, #4
   blt end
  
+/*prepare registers for array*/
   mov r8, #0
   mov r9, #4
   mov r7, #0
   mov r6, #0
   mov r5, #0 
   mov r1, #0
-
+/*prepare stack for array*/
   ldr r5, address_of_number_read
   ldr r5, [r5]
   add r1, r1, r5 
-//  add r5, r5, #3
   sub r1, r1, #2
   mov r6, #4
   mul r1, r1, r6 
   mov fp, sp            /* fp ← sp. Keep dynamic link in fp */
-  sub sp, sp, r1        /* Enlarge the stack by 8 bytes */
+  sub sp, sp, r1        /* Enlarge the stack by 4*number of indices bytes */
+  /*store 2 and three in indice 1 and 2 as the first two prime number*/
   mov r0, #2
   str r0, [sp]
   add sp, sp, #4
@@ -86,10 +67,20 @@ primeF:
   add sp, sp, #4
   mov r0, #0
   mov r1, #0
-   loop:
+/*loop through until reach the upper bounds of prime numbers*/
+/*compare each number from 4-n with prime numbers up to 47*/
+/*Because it test multiples of prime numbers 2-47, the highest upper bound is 2209 (47^2)*/
+/* they are not prime if their mod with these numbers is 0*/
+/*how ever a number mod itself is 0 so r3 is used to make sure that*/
+/*if a mod is returned as zero that is was the result of more than one subrtaction*/
+/*prime numbers are saved as their value and non-prime numbers are saved as zero*/
+ 
+  loop:
   cmp r9, r5
   moveq sp, fp
   beq stop
+
+  /*test on 2*/
   mov r3, #0
   mov r1, #0
   add r1, r1, r9
@@ -105,10 +96,11 @@ primeF:
 
  end2:
  cmp r1, #0
-bne s3
+ bne s3
  cmp r3, #1
  bgt zero
- s3:
+ /*test on 3*/
+  s3:
   mov r3, #0
   mov r1, #0
   add r1, r1, r9
@@ -126,6 +118,7 @@ end3:
 bne s4
  cmp r3, #1
  bgt zero
+/*test on 7*/
 s4:
 
   mov r3, #0
@@ -145,6 +138,7 @@ end4:
 bne s5
  cmp r3, #1
  bgt zero
+/*test on 5*/
 s5:
   mov r1, #0
   add r1, r1, r9
@@ -162,6 +156,7 @@ end5:
  bne s6
  cmp r3, #1
  bgt zero
+/*test on 13*/
 s6:
  mov r3, #0
  mov r1, #0
@@ -180,6 +175,7 @@ end6:
  bne s7
  cmp r3, #1
  bgt zero
+/*test on 17*/
 s7:
  mov r3, #0
  mov r1, #0
@@ -198,6 +194,7 @@ end7:
  bne s15
  cmp r3, #1
  bgt zero
+/*test on 19*/
 s15:
  mov r3, #0
  mov r1, #0
@@ -216,6 +213,7 @@ end15:
  bne s8
  cmp r3, #1
  bgt zero
+/*test on 23*/
 s8:
  mov r3, #0
  mov r1, #0
@@ -234,6 +232,7 @@ end8:
  bne s9
  cmp r3, #1
  bgt zero
+/*test on 29*/
 s9:
  mov r3, #0
 
@@ -254,6 +253,7 @@ end9:
  bne s10
  cmp r3, #1
  bgt zero
+/*test on 31*/
 s10:
  mov r3, #0
  mov r1, #0
@@ -272,6 +272,7 @@ end10:
  bne s11
  cmp r3, #1
  bgt zero
+/*test on 37*/
 s11:
  mov r3, #0
 
@@ -291,6 +292,7 @@ end11:
  bne s12
  cmp r3, #1
  bgt zero
+/*test on 41*/
 s12:
  mov r3, #0
 
@@ -311,6 +313,7 @@ end12:
  bne s13
  cmp r3, #1
  bgt zero
+/*test on 43*/
 s13:
  mov r3, #0
 
@@ -330,7 +333,7 @@ cmp r1, #0
  bne s16
  cmp r3, #1
  bgt zero
-
+/*test on 11*/
 s16:
  mov r3, #0
 
@@ -351,6 +354,7 @@ end16:
  bne s14
  cmp r3, #1
  bgt zero
+/*test on 47*/
 s14:
  mov r3, #0
 
@@ -370,7 +374,7 @@ end14:
  bne prime
  cmp r3, #1
  bgt zero
-
+/*save a numbers value that is prime*/
 prime:
   mov r2, #0
   add r2, r2, r9
@@ -378,6 +382,7 @@ prime:
   add sp, sp, #4
   add r9, r9, #1
   bal loop            /* sp ← fp. Restore dynamic link in fp */
+/*save a non-prime number as zero*/
 zero:
 mov r2, #0
 str r2, [sp]
@@ -387,7 +392,7 @@ bal loop
 
 
 
-   
+   /*prepare registers for print function after the array is complete*/
  stop:
  mov r7, #0
  mov r1, #0
@@ -397,12 +402,12 @@ bal loop
  sub r2, r2, #2
  mov r6, #4
  add r7, r7, r2
-// sub r7, r7, #2
+
  mov r9, #0
  mul r2, r2, r6
  mov fp, sp            /* fp ← sp. Keep dynamic link in fp */
  sub sp, sp, r2        /* Enlarge the stack by 8 bytes */
-  
+  /*loop through array and print all non-zero values (these are the prime values from earlier*/
    loop2:
   cmp r9, r7
   moveq sp, fp
@@ -414,6 +419,7 @@ bal loop
   add sp, sp, #4
   add r9, r9, #1
   bal loop2      
+/*after registers are prepared the print comenses*/
 print3:
   add r4, r4, #1
   add r1, r4, #0
@@ -422,7 +428,7 @@ print3:
   add sp, sp, #4
   add r9, r9, #1
 bal loop2
-
+/*restore registers and leave subroutine*/
 end:
  POP { r4, r5, r6, r7, r8, r9}
  ldr lr, address_of_return /* lr ← &address_of_return */
@@ -430,7 +436,6 @@ end:
  bx lr /* return from main using lr */
 //lables for all variables
 address_of_message111 : .word message111
-addm1 : .word m1
 address_of_message2 : .word message2
 address_of_message3 : .word message3
 address_of_scan_pattern : .word scan_pattern

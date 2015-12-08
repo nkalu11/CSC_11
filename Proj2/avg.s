@@ -80,7 +80,10 @@ avg:
 //compare it to 45
  ldr r9, address_of_number_read
  ldr r9, [r9]
- 
+ cmp r9, #44
+ bgt end22
+ cmp r9, #1
+ blt end22 
 
  
 
@@ -161,6 +164,22 @@ end:
  ldr lr, address_of_return /* lr ← &address_of_return */
  ldr lr, [lr] /* lr ← *lr */
  bx lr /* return from main using lr */
+//this function pops back
+//registers to their original values and restores the link register
+end22:
+
+  mov r1, #0
+  
+  ldr r0, address_of_message2 /* r0 ← &message1 */
+  bl printf /* call to printf */
+
+
+
+ POP { r4, r5, r6, r7, r8, r9, r10, r11}
+ ldr lr, address_of_return /* lr ← &address_of_return */
+ ldr lr, [lr] /* lr ← *lr */
+ bx lr /* return from main using lr */
+
 //lables for all variables
 address_of_message1 : .word message1
 address_of_message2 : .word message2

@@ -1,7 +1,7 @@
 .data
 /* First message */
 .balign 4
-message1: .asciz "Input a value to find the square root of: "
+message1: .asciz "Input a positive value 1 or greater to find the square root of: "
 /* Second message */
 .balign 4
 message2: .asciz "sqrt: %f\n"
@@ -39,8 +39,11 @@ square:
 
        ldr r0, address_of_scan_pattern /* r0 ← &scan_pattern */
        ldr r1, addnr /* r1 ← &number_read */  
+
        bl scanf /* call to scanf */
    
+   /*prepare registers by loading them with appropriate floate value*/
+   /*created and saved as variables*/
    ldr r1, addnr
    VLDR s1, [r1]
    ldr r1, adzero
@@ -58,29 +61,33 @@ square:
    VLDR s8, [r1]
    ldr r1, adzero
    VLDR s7, [r1]
-
+ /*copy inputed value by user that is stored in S1 to S7*/
    VADD.F32 S7, S7, S1
+ /*divide input value by s , subtract this value from s, divide s by two*/
   loop:
   
     VDIV.F32 S4, S1, S7
     VADD.F32 S7, S7, S4
     VDIV.F32 S7, S7, S2
-  
-   check:
+  /*compare s- input value /s  to precision number*/
+   /*if greater than continue, if less than end*/
+    check:
     ldr r1, adzero
     VLDR s5, [r1]
     VSUB.F32 S5, S7, S4
     VCMP.F32 S5, S6
     VMRS APSR_nzcv, FPSCR
    bgt loop
-  
+  /*move answer to s14*/
    VMOV s14, s7
 
-  // VCVT.F64.F32 d5, s14
+   
+  /*convert answer to 64 bit*/
    VCVT.F64.F32 d0, s14
    
+ /*prepare for print function by moving answer to r2 and 3*/
    ldr r0, address_of_message2
-
+   
    VMOV r2, r3, d0
       
 
