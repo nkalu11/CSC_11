@@ -7,7 +7,7 @@ message1: .asciz "Input the ammount of numbers you want to average "
 message4: .asciz "Now input the values "
 /* Second message */
 .balign 4
-message2: .asciz "Mean = %d\n"
+message2: .asciz "Average = %d\n"
 /* Second message */
 .balign 4
 message3: .asciz "%d\n"

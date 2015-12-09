@@ -4,7 +4,7 @@
 message1: .asciz "Input a positive value 1 or greater to find the square root of: "
 /* Second message */
 .balign 4
-message2: .asciz "sqrt: %f\n"
+message2: .asciz "Square Root = %f\n"
 .balign 4
 /* Format pattern for scanf */
 .balign 4

@@ -1,7 +1,7 @@
 .data
 /* First message */
 .balign 4
-message111: .asciz "Input upper limit for prime numbers: "
+message111: .asciz "Input an upper limit greater than 4 but not greater than 2209 for prime numbers. "
 /* Second message */
 .balign 4
 message2: .asciz "Prime #%d: %d\n"

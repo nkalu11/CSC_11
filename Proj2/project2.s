@@ -1,7 +1,7 @@
 .data
 /* First message */
 .balign 4
-message11: .asciz "Enter a number followed by an arithmatic\n symbol followed by another number, eaxmple: 3 * 7\n or enter '0 q 0' to quit(*, /, +, -, %) : "
+message11: .asciz "Input '0 s 0' for the square root function, '0 p 0' for the prime number function, \nor '0 a 0' for the average function. Or Enter a number followed by an arithmatic\n symbol followed by another number, eaxmple: 3 * 7\n or enter '0 q 0' to quit(*, /, +, -, %) : "
 /* Second message */
 .balign 4
 message22: .asciz "%d * %d = %d\n"
@@ -105,16 +105,16 @@ main:
        beq mod
        bal error
 
-/*this routine branches to the mod function and then prints the returned */
+/*this routine calls the  prime function*/
       prime1:
       bl  primeF
       bal intro
 
-/*this routine branches to the mod function and then prints the returned */
+/*this routine calls the average function*/
       ag1:
       bl  avg
       bal intro
-/*this routine branches to the mod function and then prints the returned */
+/*this routine calls the square root function */
       squareb:
       bl  square
       bal intro
