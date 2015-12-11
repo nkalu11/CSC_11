@@ -9,10 +9,10 @@ message2: .asciz "\nI read the number %d\n"
 /* Format pattern for scanf */
 /* Second message */
 .balign 4
-message5: .asciz "Too many tries \n"
+message5: .asciz "Too many tries. \n"
 /* Second message */
 .balign 4
-message4: .asciz "Congratulations, You guessed the number!\n Would you like to play again(y or n) \n"
+message4: .asciz "Congratulations, You guessed the number!\n Would you like to play again (y or n)? \n"
 /* Second message */
 .balign 4
 message3: .asciz "Too High. Try again.\n"
@@ -100,8 +100,8 @@ ranf:
   loop_rand:                     /* Create a 2 digit random number */
 	bl rand                      /* Call rand */
 	mov r1,r0,ASR #1             /* In case random return is negative */
-	mov r2,#90                   /* Move 90 to r2 */
-		                         /* We want rand()%90+10 so cal divMod with rand()%90 */
+	mov r2,#1000                   /* Move 90 to r2 */
+//	mov r2, #90	                         /* We want rand()%90+10 so cal divMod with rand()%90 */
 	bl divMod                    /* Call divMod function to get remainder */
 	add r1,#10                   /* Remainder in r1 so add 10 giving between 10 and 99 -> 2 digits */
 	
@@ -110,14 +110,16 @@ ranf:
     pop {r4,lr}                     /* Pop the top of the stack and put it in lr */
     bx lr                        /* Leave main */
 
-.global main
-main:
+.global problem1
+
+problem1:
+
  PUSH {r4, r5, r6, r7, r9, lr}
  bloop:
- bl ranf
-// ldr r0, address_of_message1 /* r0 ← &message1 */
-// bl printf /* call to printf */
 
+//generate random number
+ bl ranf
+//initiallize variables
  mov r6, #0
  add r6, r6, r1
  mov r7, #0
@@ -125,37 +127,39 @@ main:
  
  ldr r0, address_of_message1 /* r0 ← &message1 */
  bl printf /* call to printf */
- loop:
+//loop until 10 loop or player guesses right 
+loop:
  cmp r7, #0
  beq end1
  ldr r0, address_of_scan_pattern /* r0 ← &scan_pattern */
  ldr r1, address_of_number_read /* r1 ← &number_read */
  bl scanf /* call to scanf */
+//store guess in r1
  ldr r1, address_of_number_read
  ldr r1, [r1]
 
+//determine if guess is correct, too low, or too high
  cmp r6, r1
  beq tmt
- 
  cmp r1, r6
  blt lcont
- 
  cmp r1, r6
  bgt gcont
  
-
+//tell player guess is too low 
  lcont:
  ldr r0, address_of_message22 /* r0 ← &message2 */
  sub r7, r7, #1
  bl printf
  bal loop
-
+//tell player guess is too high
  gcont:
  ldr r0, address_of_message3 /* r0 ← &message2 */
  bl printf 
  sub r7, r7, #1
  bal loop
  
+//player guesses correctly
  tmt:
  ldr r0, address_of_message4 /* r0 ← &message1 */
  bl printf /* call to printf */
@@ -170,14 +174,14 @@ main:
  cmp r1, #0x79
  beq bloop
  bal end
-
+//end routine if player loses
 end1:
  ldr r0, address_of_message5
  bl printf
  POP {r4, r5, r6, r7, r9, lr}
  bx lr /* return from main using lr */
 
-
+//end routine if player wins
 end:
  POP {r4, r5, r6, r7, r9, lr}
  bx lr /* return from main using lr */
